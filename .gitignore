@@ -1,0 +1,38 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+*~
+
+# Roblox Studio
+*.rbxl.lock
+*.rbxlx.lock
+
+# Project specific
+opai_GUI.lua
+publish.sh
+PUBLISH_GUIDE.md
+发布指南.md
+发布脚本
+
