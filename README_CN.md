@@ -12,7 +12,6 @@
 - **主题切换**：内置深色和浅色主题
 - **触控优化**：完美适配手机和电脑
 - **可拖动**：自由移动灵动岛位置
-- **历史记录**：查看最近的通知
 
 ## 安装方法
 
@@ -55,12 +54,6 @@ _G.DynamicIsland.ToggleVisibility()
 ```
 显示或隐藏灵动岛。
 
-### ShowHistory
-```lua
-_G.DynamicIsland.ShowHistory()
-```
-查看最近的通知历史。
-
 ### Destroy
 ```lua
 _G.DynamicIsland.Destroy()
@@ -73,7 +66,6 @@ _G.DynamicIsland.Destroy()
 local Config = {
     DemoMode = false,
     DefaultNotifDuration = 3.5,
-    MaxHistoryCount = 10,
     MaxQueueSize = 20,
     MaxConcurrentNotifications = 3,
     NotificationSpacing = 10,
@@ -84,7 +76,6 @@ local Config = {
 
 - **单击**：触发菜单（K键）
 - **双击**：切换主题
-- **长按**：查看通知历史
 - **拖动**：移动灵动岛
 - **悬停**：显示关闭按钮
 
@@ -156,7 +147,6 @@ MIT License - 可自由用于项目中。
 - 交互式动画
 - 主题系统
 - 优先级队列
-- 历史记录
 - 移动端优化
 - 拖拽功能
 

@@ -12,7 +12,6 @@ A modern notification system inspired by iOS Dynamic Island, designed for Roblox
 - **Theme Support**: Built-in dark and light themes
 - **Touch Optimized**: Fully responsive on mobile and desktop
 - **Draggable**: Move the island anywhere on screen
-- **History**: Track recent notifications
 
 ## Installation
 
@@ -55,12 +54,6 @@ _G.DynamicIsland.ToggleVisibility()
 ```
 Show or hide the Dynamic Island.
 
-### ShowHistory
-```lua
-_G.DynamicIsland.ShowHistory()
-```
-Display recent notification history.
-
 ### Destroy
 ```lua
 _G.DynamicIsland.Destroy()
@@ -73,7 +66,6 @@ Clean up and remove the Dynamic Island.
 local Config = {
     DemoMode = false,
     DefaultNotifDuration = 3.5,
-    MaxHistoryCount = 10,
     MaxQueueSize = 20,
     MaxConcurrentNotifications = 3,
     NotificationSpacing = 10,
@@ -84,7 +76,6 @@ local Config = {
 
 - **Single Click**: Trigger menu (K key)
 - **Double Click**: Toggle theme
-- **Long Press**: View notification history
 - **Drag**: Move the island
 - **Hover**: Show close button
 
@@ -156,7 +147,6 @@ MIT License - Feel free to use in your projects.
 - Interactive animations
 - Theme system
 - Notification queue with priority
-- History tracking
 - Mobile optimization
 - Drag and drop functionality
 
