@@ -589,7 +589,6 @@ EventConnections.mouseDown = ClickButton.MouseButton1Down:Connect(function()
         task.wait(0.8)
         if tick() - clickStartTime >= 0.8 and not isDragging then
             longPressActive = true
-            ShowHistory()
         end
     end)
     
@@ -801,9 +800,6 @@ local function Destroy()
     if HiddenContainer then
         HiddenContainer:Destroy()
     end
-    if TestPanel then
-        TestPanel:Destroy()
-    end
     
     _G.ShowIslandNotification = nil
     _G.DynamicIsland = nil
@@ -823,215 +819,10 @@ local DynamicIslandModule = {}
 DynamicIslandModule.ShowNotification = ShowIslandNotification
 DynamicIslandModule.ToggleTheme = ToggleTheme
 DynamicIslandModule.ToggleVisibility = ToggleVisibility
-DynamicIslandModule.ShowHistory = ShowHistory
 DynamicIslandModule.Destroy = Destroy
 DynamicIslandModule.Config = Config
 
 _G.ShowIslandNotification = ShowIslandNotification
 _G.DynamicIsland = DynamicIslandModule
-
-local TestPanel = Instance.new("ScreenGui")
-TestPanel.Name = "IslandTestPanel"
-TestPanel.ResetOnSpawn = false
-TestPanel.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-TestPanel.Parent = CoreGui
-
-local PanelFrame = Instance.new("Frame")
-PanelFrame.Name = "Panel"
-PanelFrame.Size = UDim2.new(0, IsMobile and 280 or 320, 0, IsMobile and 380 or 420)
-PanelFrame.Position = UDim2.new(1, IsMobile and -290 or -330, 0.5, IsMobile and -190 or -210)
-PanelFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-PanelFrame.BorderSizePixel = 0
-PanelFrame.Parent = TestPanel
-
-local PanelCorner = Instance.new("UICorner")
-PanelCorner.CornerRadius = UDim.new(0, 12)
-PanelCorner.Parent = PanelFrame
-
-local PanelStroke = Instance.new("UIStroke")
-PanelStroke.Color = Color3.fromRGB(80, 80, 255)
-PanelStroke.Thickness = 2
-PanelStroke.Transparency = 0.3
-PanelStroke.Parent = PanelFrame
-
-local PanelTitle = Instance.new("TextLabel")
-PanelTitle.Name = "Title"
-PanelTitle.Size = UDim2.new(1, -20, 0, 40)
-PanelTitle.Position = UDim2.new(0, 10, 0, 10)
-PanelTitle.BackgroundTransparency = 1
-PanelTitle.Text = "灵动岛测试面板"
-PanelTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-PanelTitle.TextSize = IsMobile and 16 or 18
-PanelTitle.Font = Enum.Font.GothamBold
-PanelTitle.TextXAlignment = Enum.TextXAlignment.Left
-PanelTitle.Parent = PanelFrame
-
-local ClosePanelBtn = Instance.new("TextButton")
-ClosePanelBtn.Size = UDim2.new(0, 30, 0, 30)
-ClosePanelBtn.Position = UDim2.new(1, -40, 0, 10)
-ClosePanelBtn.BackgroundColor3 = Color3.fromRGB(255, 80, 80)
-ClosePanelBtn.Text = "X"
-ClosePanelBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ClosePanelBtn.TextSize = 14
-ClosePanelBtn.Font = Enum.Font.GothamBold
-ClosePanelBtn.Parent = PanelFrame
-
-local ClosePanelCorner = Instance.new("UICorner")
-ClosePanelCorner.CornerRadius = UDim.new(0, 8)
-ClosePanelCorner.Parent = ClosePanelBtn
-
-EventConnections.closePanelBtn = ClosePanelBtn.MouseButton1Click:Connect(function()
-    TestPanel:Destroy()
-end)
-
-local ButtonContainer = Instance.new("Frame")
-ButtonContainer.Name = "Buttons"
-ButtonContainer.Size = UDim2.new(1, -20, 1, -60)
-ButtonContainer.Position = UDim2.new(0, 10, 0, 50)
-ButtonContainer.BackgroundTransparency = 1
-ButtonContainer.Parent = PanelFrame
-
-local Layout = Instance.new("UIListLayout")
-Layout.Padding = UDim.new(0, 8)
-Layout.SortOrder = Enum.SortOrder.LayoutOrder
-Layout.Parent = ButtonContainer
-
-local function CreateButton(text, color, callback, order)
-    local btn = Instance.new("TextButton")
-    btn.Name = text
-    btn.Size = UDim2.new(1, 0, 0, IsMobile and 35 or 40)
-    btn.BackgroundColor3 = color
-    btn.Text = text
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = IsMobile and 13 or 14
-    btn.Font = Enum.Font.GothamBold
-    btn.AutoButtonColor = false
-    btn.LayoutOrder = order
-    btn.Parent = ButtonContainer
-    
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = btn
-    
-    btn.MouseButton1Click:Connect(callback)
-    
-    btn.MouseButton1Down:Connect(function()
-        TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundTransparency = 0.3}):Play()
-    end)
-    
-    btn.MouseButton1Up:Connect(function()
-        TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundTransparency = 0}):Play()
-    end)
-    
-    btn.MouseLeave:Connect(function()
-        btn.BackgroundTransparency = 0
-    end)
-    
-    return btn
-end
-
-CreateButton("成功通知", Color3.fromRGB(0, 200, 100), function()
-    ShowIslandNotification("成功", "操作成功完成", "success")
-end, 1)
-
-CreateButton("错误通知", Color3.fromRGB(255, 80, 80), function()
-    ShowIslandNotification("错误", "出现了一些问题", "error")
-end, 2)
-
-CreateButton("警告通知", Color3.fromRGB(255, 180, 0), function()
-    ShowIslandNotification("警告", "请注意此操作", "warning")
-end, 3)
-
-CreateButton("信息通知", Color3.fromRGB(100, 150, 255), function()
-    ShowIslandNotification("提示", "这是一条普通消息", "info")
-end, 4)
-
-CreateButton("长时间通知", Color3.fromRGB(120, 80, 200), function()
-    ShowIslandNotification("测试", "这条通知会显示5秒", "info", 5)
-end, 5)
-
-CreateButton("高优先级", Color3.fromRGB(255, 100, 0), function()
-    ShowIslandNotification("紧急", "高优先级消息", "error", 3, 10)
-end, 6)
-
-CreateButton("多通知测试", Color3.fromRGB(80, 180, 150), function()
-    for i = 1, 5 do
-        local types = {"success", "error", "warning", "info"}
-        local titles = {"新消息", "系统提示", "警告", "完成", "通知"}
-        local notifType = types[math.random(1, #types)]
-        local title = titles[math.random(1, #titles)] .. " #" .. i
-        ShowIslandNotification(title, "测试通知", notifType, 2.5)
-        task.wait(0.15)
-    end
-end, 7)
-
-CreateButton("切换主题", Color3.fromRGB(100, 100, 255), function()
-    ToggleTheme()
-    local themeText = CurrentTheme == "Dark" and "深色" or "浅色"
-    ShowIslandNotification("主题", themeText, "info", 2)
-end, 8)
-
-CreateButton("查看历史", Color3.fromRGB(150, 100, 200), function()
-    ShowHistory()
-end, 9)
-
-CreateButton("隐藏/显示", Color3.fromRGB(180, 80, 120), function()
-    ToggleVisibility()
-end, 10)
-
-local panelDragging = false
-local panelDragInput, panelDragStart, panelStartPos
-local panelInputChangedConnection = nil
-
-EventConnections.panelInputBegan = PanelTitle.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or 
-       input.UserInputType == Enum.UserInputType.Touch then
-        panelDragging = true
-        panelDragStart = input.Position
-        panelStartPos = PanelFrame.Position
-        
-        if panelInputChangedConnection then
-            panelInputChangedConnection:Disconnect()
-        end
-        
-        panelInputChangedConnection = input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                panelDragging = false
-                
-                if panelInputChangedConnection then
-                    panelInputChangedConnection:Disconnect()
-                    panelInputChangedConnection = nil
-                end
-            end
-        end)
-    end
-end)
-
-EventConnections.panelInputChanged = PanelTitle.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or
-       input.UserInputType == Enum.UserInputType.Touch then
-        panelDragInput = input
-    end
-end)
-
-EventConnections.panelUserInputChanged = UserInputService.InputChanged:Connect(function(input)
-    if input == panelDragInput and panelDragging then
-        local delta = input.Position - panelDragStart
-        PanelFrame.Position = UDim2.new(
-            panelStartPos.X.Scale,
-            panelStartPos.X.Offset + delta.X,
-            panelStartPos.Y.Scale,
-            panelStartPos.Y.Offset + delta.Y
-        )
-    end
-end)
-
-PanelFrame.Position = UDim2.new(1, 50, 0.5, IsMobile and -190 or -210)
-task.wait(0.5)
-TweenService:Create(
-    PanelFrame,
-    TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-    {Position = UDim2.new(1, IsMobile and -290 or -330, 0.5, IsMobile and -190 or -210)}
-):Play()
 
 return DynamicIslandModule
