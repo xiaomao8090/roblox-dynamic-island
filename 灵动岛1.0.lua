@@ -45,7 +45,6 @@ local Config = {
     SavePosition = false,
     EnableSound = false,
     DefaultNotifDuration = 3.5,
-    MaxHistoryCount = 10,
     MaxQueueSize = 20,
     MaxConcurrentNotifications = 3,
     NotificationSpacing = 10,
@@ -85,7 +84,6 @@ local ActiveTheme = Themes[CurrentTheme]
 
 local ActiveNotifications = {}
 local NotificationQueue = {}
-local NotificationHistory = {}
 local NotificationCounter = 0
 local IsVisible = true
 local CurrentTweens = {}
@@ -379,20 +377,6 @@ local function CreateNotificationUI(notifId, layoutOrder)
     }
 end
 
-local function ShowHistory()
-    if #NotificationHistory == 0 then
-        return
-    end
-    
-    local historyText = "最近通知:\n"
-    for i = math.max(1, #NotificationHistory - 4), #NotificationHistory do
-        local notif = NotificationHistory[i]
-        historyText = historyText .. string.format("[%s] %s\n", notif.type, notif.title)
-    end
-    
-    ShowIslandNotification("历史记录", historyText, "info", 5)
-end
-
 local function ProcessNotificationQueue()
     while #NotificationQueue > 0 and #ActiveNotifications < Config.MaxConcurrentNotifications do
         local notifData = table.remove(NotificationQueue, 1)
@@ -413,16 +397,6 @@ function ShowIslandNotification(title, content, notifType, duration, priority)
     duration = duration or Config.DefaultNotifDuration
     priority = priority or 1
     notifType = notifType or "info"
-    
-    table.insert(NotificationHistory, {
-        title = title,
-        content = content,
-        type = notifType,
-        time = os.date("%H:%M:%S")
-    })
-    if #NotificationHistory > Config.MaxHistoryCount then
-        table.remove(NotificationHistory, 1)
-    end
     
     if #ActiveNotifications >= Config.MaxConcurrentNotifications then
         if #NotificationQueue >= Config.MaxQueueSize then
@@ -820,7 +794,6 @@ local function Destroy()
     
     ActiveNotifications = {}
     NotificationQueue = {}
-    NotificationHistory = {}
     
     if DynamicIsland then
         DynamicIsland:Destroy()
