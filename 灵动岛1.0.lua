@@ -86,6 +86,7 @@ local ActiveTheme = Themes[CurrentTheme]
 local ActiveNotifications = {}
 local NotificationQueue = {}
 local NotificationHistory = {}
+local NotificationCounter = 0
 local IsVisible = true
 local CurrentTweens = {}
 local EventConnections = {}
@@ -296,7 +297,7 @@ local function MainIslandPulse()
     )
 end
 
-local function CreateNotificationUI(notifId)
+local function CreateNotificationUI(notifId, layoutOrder)
     local notifWidth = IsMobile and 260 or 320
     local notifHeight = IsMobile and 50 or 60
     
@@ -305,7 +306,7 @@ local function CreateNotificationUI(notifId)
     NotifFrame.Size = UDim2.new(0, notifWidth, 0, notifHeight)
     NotifFrame.BackgroundColor3 = ActiveTheme.Background
     NotifFrame.BorderSizePixel = 0
-    NotifFrame.LayoutOrder = notifId
+    NotifFrame.LayoutOrder = layoutOrder
     NotifFrame.Position = UDim2.new(0.5, -notifWidth/2, 0, -(IslandYPos + IslandHeight + 20))
     NotifFrame.BackgroundTransparency = 1
     NotifFrame.Parent = NotificationsContainer
@@ -447,6 +448,8 @@ function ShowIslandNotification(title, content, notifType, duration, priority)
     end
     
     local notifId = HttpService:GenerateGUID(false):sub(1, 8)
+    NotificationCounter = NotificationCounter + 1
+    local layoutOrder = NotificationCounter
     
     local iconColor, iconText, strokeColor
     if notifType == "success" then
@@ -467,7 +470,7 @@ function ShowIslandNotification(title, content, notifType, duration, priority)
         strokeColor = Color3.fromRGB(100, 150, 255)
     end
     
-    local notifUI = CreateNotificationUI(notifId)
+    local notifUI = CreateNotificationUI(notifId, layoutOrder)
     notifUI.Icon.TextColor3 = iconColor
     notifUI.Icon.Text = iconText
     notifUI.Title.Text = title
